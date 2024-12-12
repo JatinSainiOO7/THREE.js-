@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(180deg, #1e1e2f, #282848);
+    color: white;
+}
+
+#container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+#scroll-info {
+    position: absolute;
+    top: 10%;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+}
