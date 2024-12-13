@@ -53,24 +53,30 @@ const geometry = new THREE.TorusKnotGeometry(1, 0.4, 400,400,3);
 const metalBox = new THREE.Mesh(geometry, metalMaterial);
 scene.add(metalBox);
 
-// Raindrop Particle System
+// // Raindrop Particle System
 const raindropGeometry = new THREE.BufferGeometry();
-const raindropCount = 20000; // Number of raindrops
+const raindropCount = 100000; // Number of raindrops
+const radius = 50; // Radius of the circular area
 
 const positions = new Float32Array(raindropCount * 3); // Store positions of raindrops
 for (let i = 0; i < raindropCount; i++) {
-    positions[i * 3] = Math.random() * 100 - 50; // X position (random in range)
+    let angle = Math.random() * Math.PI * 2; // Random angle in a circle
+    let distance = Math.sqrt(Math.random()) * radius; // Random distance within the circle
+
+    positions[i * 3] = Math.cos(angle) * distance; // X position
     positions[i * 3 + 1] = Math.random() * 100; // Y position (starting height)
-    positions[i * 3 + 2] = Math.random() * 100 - 50; // Z position (random in range)
+    positions[i * 3 + 2] = Math.sin(angle) * distance; // Z position
 }
 
-raindropGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+raindropGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
 const raindropMaterial = new THREE.PointsMaterial({
-    color: 0x0fff99ee, // Blueish color for raindrops
-    size: 0.2, // Size of each raindrop
+    // map: particleTexture, // Use circular texture
+    size: 0.05, // Adjust size of particles
     transparent: true,
-    opacity: 0.8, // Slightly transparent
+    opacity: 1,
+    depthWrite: false, // Ensure particles do not occlude each other
+    color: 0x00ffff,
 });
 
 const raindrops = new THREE.Points(raindropGeometry, raindropMaterial);
@@ -105,18 +111,18 @@ const raindropSpeed = 0.05; // Speed of rain falling
 function animate() {
     requestAnimationFrame(animate);
     
-    // raindropMaterial.size = Math.sin(Math.tan(Math.sin(v/10))) + 0.3;
+    // raindropMaterial.size = Math.sin(Math.tan(Math.sin(v/10))) + 0.03;
     raindropMaterial.color = new THREE.Color().setRGB(Math.sin(v/100), 100, 100);;
     // Auto-rotation of the box
-    // metalBox.rotation.x += 0.01; // Adjust speed of rotation
-    // metalBox.rotation.y += 0.01; // Adjust speed of rotation
+    metalBox.rotation.x += 0.01; // Adjust speed of rotation
+    metalBox.rotation.y += 0.02; // Adjust speed of rotation
 
     // Rotate the camera around the box on X and Y axis
     angle += 0.01; // Adjust speed of camera rotation
     camera.position.x = 5 * Math.cos(angle); // Circle path on X-axis
     camera.position.z = 5 * Math.sin(angle); // Circle path on Z-axis
     camera.position.y = 5 + 10 * Math.tan(angle/Math.PI); // Smooth up-down motion on Y-axis
-    camera.position.z = 2 + 2 * Math.tan(Math.cos(v / 100)); // Smooth up-down motion on Y-axis
+    camera.position.z = 2 + 2 * Math.tan(Math.cos(v / 500)); // Smooth up-down motion on Y-axis
     camera.lookAt(metalBox.position); // Keep camera looking at the box
 
     // Animate raindrops falling
