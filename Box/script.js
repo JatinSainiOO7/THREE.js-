@@ -49,13 +49,13 @@ const metalMaterial = new THREE.MeshNormalMaterial({
 });
 
 // Metal Box
-const geometry = new THREE.TorusKnotGeometry(1, 0.4, 400,400,3);
+const geometry = new THREE.TorusKnotGeometry(1, 0.05, 1000,1000, 11,12);
 const metalBox = new THREE.Mesh(geometry, metalMaterial);
 scene.add(metalBox);
 
 // // Raindrop Particle System
 const raindropGeometry = new THREE.BufferGeometry();
-const raindropCount = 100000; // Number of raindrops
+const raindropCount = 500000; // Number of raindrops
 const radius = 50; // Radius of the circular area
 
 const positions = new Float32Array(raindropCount * 3); // Store positions of raindrops
@@ -114,15 +114,15 @@ function animate() {
     // raindropMaterial.size = Math.sin(Math.tan(Math.sin(v/10))) + 0.03;
     raindropMaterial.color = new THREE.Color().setRGB(Math.sin(v/100), 100, 100);;
     // Auto-rotation of the box
-    metalBox.rotation.x += 0.01; // Adjust speed of rotation
-    metalBox.rotation.y += 0.02; // Adjust speed of rotation
+    // metalBox.rotation.x += 0.01; // Adjust speed of rotation
+    metalBox.rotation.z =  50 + 7 * Math.tan(angle/Math.PI); // Adjust speed of rotation
 
     // Rotate the camera around the box on X and Y axis
     angle += 0.01; // Adjust speed of camera rotation
     camera.position.x = 5 * Math.cos(angle); // Circle path on X-axis
     camera.position.z = 5 * Math.sin(angle); // Circle path on Z-axis
     camera.position.y = 5 + 10 * Math.tan(angle/Math.PI); // Smooth up-down motion on Y-axis
-    camera.position.z = 2 + 2 * Math.tan(Math.cos(v / 500)); // Smooth up-down motion on Y-axis
+    camera.position.z = 2 + 10 * Math.tan(Math.cos(v / 50)); // Smooth up-down motion on Y-axis
     camera.lookAt(metalBox.position); // Keep camera looking at the box
 
     // Animate raindrops falling
